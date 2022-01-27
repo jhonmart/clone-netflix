@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Fragment } from "react/cjs/react.production.min";
 import "./MovieRow.css";
 
-export default ({ title, items }) => {
+const MovieRow = ({ title, items }) => {
   const [scrollX, setScrollX] =  useState(-400);
 
   const BASE_URL = "https://image.tmdb.org/t/p/w300";
@@ -44,3 +44,5 @@ export default ({ title, items }) => {
     </Fragment>
   );
 };
+
+export default MovieRow;

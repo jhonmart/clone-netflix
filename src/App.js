@@ -7,7 +7,7 @@ import tmdb from "./services/tmdb";
 import Footer from "./components/Footer";
 import Loading from "./components/Loading";
 
-export default () => {
+const App = () => {
   const [movieList, setMoviList] = useState([]);
   const [featureData, setFeatureData] = useState(null);
   const [blackHeader, setBlackHeader] = useState(false);
@@ -52,3 +52,5 @@ export default () => {
     </Fragment>
   );
 };
+
+export default App;
