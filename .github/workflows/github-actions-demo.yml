@@ -1,0 +1,49 @@
+name: Deploy project
+
+on: 
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 14.x
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Build project 
+        run: yarn build
+
+      # - name: Run unitary e2e test 
+      #   run: |
+      #     yarn serve &
+      #     yarn test
+      
+      # - name: Config test
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: artifacts
+      #     path: |
+      #       cypress/videos
+      #       cypress/screenshots
+      #     retention-days: 3
+
+      # - name: Run unitary test
+      #   run: yarn test:unit
+
+      - name: Deploy
+        uses: test-room-7/action-update-file@v1
+        with:
+          file-path: docs/**/*
+          commit-msg: deploy system
+          github-token: ${{ secrets.GITHUB_TOKEN }}

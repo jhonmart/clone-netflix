@@ -2,7 +2,7 @@ import React from "react";
 import { Fragment } from "react/cjs/react.production.min";
 import "./FeaturedMovie.css";
 
-export default ({ item }) => {
+const FeaturedMovie = ({ item }) => {
   const BASE_URL = "https://image.tmdb.org/t/p/original";
   const firstDate = new Date(item.first_air_date);
   const genres = item.genres.map((genre) => genre.name);
@@ -55,3 +55,5 @@ export default ({ item }) => {
     </Fragment>
   );
 };
+
+export default FeaturedMovie;

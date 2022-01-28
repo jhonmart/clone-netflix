@@ -16,7 +16,7 @@ const basicFetch = async (endpoint, parameters = {}) => {
   return json;
 };
 
-module.exports = {
+const List = {
   getHomeList: async () => {
     return [
       {
@@ -79,3 +79,5 @@ module.exports = {
     return info;
   },
 };
+
+export default List;
