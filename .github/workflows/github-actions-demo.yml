@@ -1,6 +1,6 @@
 name: Deploy project
 
-on: 
+on:
   push:
     branches:
       - main
@@ -21,14 +21,14 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
-      - name: Build project 
+      - name: Build project
         run: yarn build
 
-      # - name: Run unitary e2e test 
+      # - name: Run unitary e2e test
       #   run: |
       #     yarn serve &
       #     yarn test
-      
+
       # - name: Config test
       #   uses: actions/upload-artifact@v2
       #   with:
@@ -44,6 +44,7 @@ jobs:
       - name: Deploy
         uses: test-room-7/action-update-file@v1
         with:
+          branch: demo
           file-path: docs/**/*
           commit-msg: deploy system
           github-token: ${{ secrets.GITHUB_TOKEN }}
