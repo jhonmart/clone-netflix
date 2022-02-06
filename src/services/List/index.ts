@@ -1,7 +1,12 @@
-const API_KEY = process.env.REACT_APP_TMDB_KEY;
+const API_KEY = import.meta.env.VITE_APP_TMDB_KEY;
 const API_BASE = "https://api.themoviedb.org/3";
 
-const basicFetch = async (endpoint, parameters = {}) => {
+import { ParamFetch } from "@/interfaces/Movie";
+
+const basicFetch = async (
+  endpoint: string,
+  parameters: ParamFetch | {} = {}
+) => {
   const url_paramerters = Object.entries({
     language: "pt-BR",
     api_key: API_KEY,
@@ -16,7 +21,7 @@ const basicFetch = async (endpoint, parameters = {}) => {
   return json;
 };
 
-const List = {
+export const List = {
   getHomeList: async () => {
     return [
       {
@@ -61,23 +66,12 @@ const List = {
       },
     ];
   },
-  getMovieInfo: async (movieId, type) => {
-    let info = {};
-    if (movieId) {
-      switch (type) {
-        case "movie":
-          info = await basicFetch(`/movie/${movieId}`);
-          break;
-        case "tv":
-          info = await basicFetch(`/tv/${movieId}`);
-          break;
-        default:
-          info = null;
-          break;
-      }
+  getMovieInfo: async (movieId: number, type: "movie" | "tv") => {
+    switch (type) {
+      case "movie":
+        return await basicFetch(`/movie/${movieId}`);
+      case "tv":
+        return await basicFetch(`/tv/${movieId}`);
     }
-    return info;
   },
 };
-
-export default List;

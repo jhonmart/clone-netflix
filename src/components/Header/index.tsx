@@ -1,21 +1,22 @@
-import React from "react";
 import "./Header.css";
 
-const Header = ({black}) => {
+type ColorProps = {
+  black: boolean
+}
+
+export function Header(props: ColorProps) {
   return (
-    <header className={black ? 'black' : ''}>
+    <header className={props.black ? 'black' : ''}>
       <div className="header--logo">
-        <a href="/">
+        <a href="./">
           <img alt="Logo main" src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" />
         </a>
       </div>
       <div className="header--user">
-        <a href="/user">
+        <a href="./user">
           <img alt="Logo user default" src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png" />
         </a>
       </div>
     </header>
-  );
-};
-
-export default Header;
+  )
+}
