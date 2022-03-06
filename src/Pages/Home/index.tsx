@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "./App.css";
 
 import { Header } from "@/components/Header";
@@ -7,6 +7,7 @@ import { Footer } from "@/components/Footer";
 import { Loading } from "@/components/Loading";
 import { FeaturedMovie } from "@/components/FeaturedMovie";
 import { MovieRow } from "@/components/MovieRow";
+import { Banner } from "@/components/Banner";
 
 import { List } from "@/services/List";
 
@@ -14,16 +15,21 @@ import { CategoryMovie, Movie } from "@/interfaces/Movie";
 
 export function Home() {
   const BASE_URL = "https://image.tmdb.org/t/p/original";
+  const TIME_BANNER = 60;
   const [movieList, setMoviList] = useState<CategoryMovie[] | []>([]);
   const [featureData, setFeatureData] = useState<Movie | false>(false);
   const [blackHeader, setBlackHeader] = useState(false);
+  const [timeForShowBanner, setTimeForShowBanner] = useState(TIME_BANNER);
+  let intervalObserverScroll = useRef(0);
+  let timeFeature = useRef(0);
 
   const loadImg = async (url: string) =>
-  new Promise((resolve, reject) => {
-    const IMG = new Image();
-    IMG.src = url;
-    IMG.onload = () => resolve(true);
-  });
+    new Promise((resolve, reject) => {
+      const IMG = new Image();
+      IMG.src = url;
+      IMG.onload = () => resolve(true);
+    });
+
   const createFeatureData = async (movies: Movie[]) => {
     let randomChosen = Math.floor(
       Math.random() * (movies.length - 1)
@@ -32,13 +38,16 @@ export function Home() {
     let chosenInfo: Movie = await List.getMovieInfo(chosen.id, "tv");
     await loadImg(`${BASE_URL}${chosenInfo.backdrop_path}`);
     setFeatureData(chosenInfo);
-    setTimeout(() => {
-        createFeatureData(movies);
+    timeFeature.current = setTimeout(() => {
+      createFeatureData(movies);
     }, 15e3);
+    return () => clearTimeout(timeFeature.current);
   };
+
   const scrollListener = () => {
     setBlackHeader(window.scrollY > 10);
   };
+
   useEffect(() => {
     const loadAll = async () => {
       let list = await List.getHomeList();
@@ -60,6 +69,24 @@ export function Home() {
     };
   }, []);
 
+  const decreaseTime = () => setTimeForShowBanner((prev) => {
+    document.body.style.overflowY = prev ? "auto" : "hidden";
+    return prev && (prev - 1);
+  });
+
+  useEffect(() => {
+    intervalObserverScroll.current = setInterval(decreaseTime, 1e3);
+    document.onmousemove = function () {
+      document.body.style.overflowY = "auto";
+      setTimeForShowBanner(TIME_BANNER);
+    }
+    return () => {
+      document.body.style.overflowY = "auto";
+      setTimeForShowBanner(TIME_BANNER);
+      clearInterval(intervalObserverScroll.current)
+    };
+  }, []);
+
   return (
     <React.Fragment>
       <Header black={blackHeader} />
@@ -72,7 +99,8 @@ export function Home() {
         </section>
       </main>
       <Footer />
-      {movieList.length ? "" : <Loading />}
+      {movieList.length && featureData ? "" : <Loading />}
+      {!timeForShowBanner && featureData ? <Banner movie={featureData} /> : ""}
     </React.Fragment>
   )
 }

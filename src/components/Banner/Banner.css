@@ -1,0 +1,84 @@
+.banner {
+    height: 100vh;
+    width: 100vw;
+    top: 0;
+    position: fixed;
+    z-index: 3;
+  }
+  .banner--vertical {
+    width: inherit;
+    height: inherit;
+  }
+  .banner--horizontal {
+    width: inherit;
+    height: inherit;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-left: 30px;
+    padding-bottom: 70px;
+  }
+  .banner--name {
+    font-size: 60px;
+    font-weight: bold;
+    width: 75%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-shadow: 1px 2px 3px black;
+  }
+  .banner--info {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 15px;
+  }
+  .banner--points,
+  .banner--year,
+  .banner--seasons {
+    display: inline-block;
+    margin-right: 15px;
+  }
+  .banner--points {
+    color: #46d369;
+  }
+  .banner--mylistbutton,
+  .banner--watchbutton {
+    display: inline-block;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 12px 25px;
+    border-radius: 5px;
+    text-decoration: none;
+    margin-right: 10px;
+    opacity: 1;
+    transition: 0.2s;
+  }
+  .banner--genres {
+    margin-top: 15px;
+    font-size: 18px;
+    color: #fff;
+    text-shadow: 1px 2px 3px black;
+  }
+  @media (max-width: 760px) {
+    .banner {
+      height: 90vh;
+    }
+    .banner--name {
+      font-size: 40px;
+    }
+    .banner--info {
+      font-size: 16px;
+    }
+    .banner--description {
+      font-size: 14px;
+      max-width: 100%;
+      margin-right: 30px;
+    }
+    .banner--watchbutton,
+    .banner--mylistbutton {
+      font-size: 16px;
+    }
+    .banner--genres {
+      font-size: 14px;
+    }
+  }
