@@ -15,14 +15,8 @@ export function Banner(props: BannerProps) {
 
   return (
     <React.Fragment>
-      <section
-        className="banner"
-        style={{
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundImage: `url(${BASE_URL}${props.movie.backdrop_path})`,
-        }}
-      >
+      <section className="banner" >
+        <img src={BASE_URL + props.movie.backdrop_path} alt="movies" className="banner--image"/>
         <div className="banner--vertical">
           <div className="banner--horizontal">
             <div className="banner--name">{props.movie.original_name}</div>
