@@ -11,7 +11,6 @@ export function Banner(props: BannerProps) {
   const BASE_URL = "https://image.tmdb.org/t/p/original";
   const firstDate = new Date(props.movie.first_air_date);
   const genres = props.movie.genres?.map((genre) => genre.name);
-  const LIMIT_INFO = 200;
 
   return (
     <React.Fragment>

@@ -16,10 +16,11 @@ import { CategoryMovie, Movie } from "@/interfaces/Movie";
 export function Home() {
   const BASE_URL = "https://image.tmdb.org/t/p/original";
   const TIME_BANNER = 60;
-  const [movieList, setMoviList] = useState<CategoryMovie[] | []>([]);
+  const [movieList, setMoviList] = useState<CategoryMovie[]>([]);
   const [featureData, setFeatureData] = useState<Movie | false>(false);
-  const [blackHeader, setBlackHeader] = useState(false);
-  const [timeForShowBanner, setTimeForShowBanner] = useState(TIME_BANNER);
+  const [blackHeader, setBlackHeader] = useState<boolean>(false);
+  const [timeForShowBanner, setTimeForShowBanner] = useState<number>(Date.now() + TIME_BANNER * 1e3);
+  const [timeForShowFeature, setTimeForShowFeature] = useState<number>(Date.now() + TIME_BANNER * 500);
   let intervalObserverScroll = useRef(0);
   let timeFeature = useRef(0);
 
@@ -37,7 +38,10 @@ export function Home() {
     let chosen = movies[randomChosen];
     let chosenInfo: Movie = await List.getMovieInfo(chosen.id, "tv");
     await loadImg(`${BASE_URL}${chosenInfo.backdrop_path}`);
-    setFeatureData(chosenInfo);
+    if (timeForShowFeature < Date.now() || !featureData) {
+      setFeatureData(chosenInfo);
+      setTimeForShowFeature(Date.now() + TIME_BANNER * 500);
+    }
     timeFeature.current = setTimeout(() => {
       createFeatureData(movies);
     }, 15e3);
@@ -70,20 +74,21 @@ export function Home() {
   }, []);
 
   const decreaseTime = () => setTimeForShowBanner((prev) => {
-    document.body.style.overflowY = prev ? "auto" : "hidden";
-    return prev && (prev - 1);
+    document.body.style.overflowY = prev > Date.now() ? "auto" : "hidden";
+    return prev;
   });
 
   useEffect(() => {
     intervalObserverScroll.current = setInterval(decreaseTime, 1e3);
+
     document.onmousemove = function () {
       document.body.style.overflowY = "auto";
-      setTimeForShowBanner(TIME_BANNER);
+      setTimeForShowBanner(Date.now() + TIME_BANNER * 1e3);
     }
     return () => {
       document.body.style.overflowY = "auto";
-      setTimeForShowBanner(TIME_BANNER);
-      clearInterval(intervalObserverScroll.current)
+      setTimeForShowBanner(Date.now() + TIME_BANNER * 1e3);
+      clearInterval(intervalObserverScroll.current);
     };
   }, []);
 
@@ -100,7 +105,7 @@ export function Home() {
       </main>
       <Footer />
       {movieList.length && featureData ? "" : <Loading />}
-      {!timeForShowBanner && featureData ? <Banner movie={featureData} /> : ""}
+      {timeForShowBanner < Date.now() && featureData ? <Banner movie={featureData} /> : ""}
     </React.Fragment>
   )
 }
